@@ -5,9 +5,11 @@ A simple example of how to Embed the Embeddable.com web component in your site
 
 To test your Embedded web component:
 
-1. update `src/test.js` to use your `API_KEY` and `EMBEDDABLE_ID`
-2. run `node src/test.js`
-3. open `localhost:8080` to see your embedded dashboard
+1. click "Publish" on your Embeddable dashboard to get your `API_KEY` and `EMBEDDABLE_ID`
+2. clone/download this repo
+3. update `src/test.js` to use your `API_KEY` and `EMBEDDABLE_ID`
+4. run `node src/test.js`
+5. open `localhost:8080` to see your embedded dashboard
 
 # documentation
 

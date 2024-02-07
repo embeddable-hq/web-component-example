@@ -57,7 +57,7 @@ async function handler(req, res) {
           <meta charset="utf-8" />
           <script
             type="module"
-            src="https://api.embeddable.com/js/v1/embeddable.js"
+            src="https://api.embeddable.com/js/v1/"
           ></script>
         </head>
         <body>

@@ -32,7 +32,7 @@ async function handler(req, res) {
     console.log(`Response: ${response.status} ${response.statusText}`);
 
     const json = await response.json();
-    if(!json.success) {
+    if(!response.ok) {
         res.writeHead(response.status, { "Content-Type": "text/html" });
         res.end(`<!doctype html>
           <html>

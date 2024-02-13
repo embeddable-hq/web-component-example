@@ -14,3 +14,7 @@ To test your Embedded web component:
 # documentation
 
 [here](https://trevorio.notion.site/Embedding-an-Embeddable-2e7b7c09909f47ee9d3fee64f4e6fcd9)
+
+# react.js
+
+There is a simple react example in `src/react-test.html` (though you'll need to update the `token` manually)

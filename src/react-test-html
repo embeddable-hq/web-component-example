@@ -17,7 +17,10 @@
 
     <script type="text/babel">
       'use strict';
-      const e = React.createElement;
+
+      function Embeddable(props: { token: string }) {
+        return React.createElement('em-beddable', props);
+      }
 
       class TestComponent extends React.Component {
         constructor(props) {
@@ -27,9 +30,9 @@
 
         render() {
           if (this.state.load) {
-            return <em-beddable
+            return <Embeddable
               token="eyJhbGciOiJIUzI1NiJ9.eyJzZWN1cml0eVRva2VuSWQiOiJmZWE5NDA0Ny1lMjhhLTQ5ZGQtOGQ0YS1mZDdjNDY2MDE0YzUiLCJpYXQiOjE3MDc3Njk3ODEsImV4cCI6MTcwODM3NDU4MX0.IglDlXs9JymBwLrpPUMREpSkClkjY0xuJmoXgHwiqLk"
-            ></em-beddable>;
+            />;
           }
 
           return (
@@ -42,7 +45,7 @@
 
       const domContainer = document.querySelector('#test-container');
       const root = ReactDOM.createRoot(domContainer);
-      root.render(e(TestComponent));
+      root.render(React.createElement(TestComponent));
     </script>
   </body>
 </html>

@@ -18,29 +18,42 @@
     <script type="text/babel">
       'use strict';
 
-      function Embeddable(props: { token: string }) {
-        return React.createElement('em-beddable', props);
+      function Embeddable({onComponentsLoad, ...props}) {
+        const ref = React.useRef(null);
+
+        React.useEffect(() => {
+          ref.current.addEventListener('componentsLoad', onComponentsLoad);
+          return () => {
+            ref.current.removeEventListener('componentsLoad', onComponentsLoad);
+          };
+        }, []);
+        return React.createElement('em-beddable', {...props, ref});
       }
 
-      class TestComponent extends React.Component {
-        constructor(props) {
-          super(props);
-          this.state = { load: false };
-        }
+      const TestComponent = () => {
+        const [load, setLoad] = React.useState(false);
+        const [isLoading, setIsLoading] = React.useState(false);
 
-        render() {
-          if (this.state.load) {
-            return <Embeddable
-              token="eyJhbGciOiJIUzI1NiJ9.eyJzZWN1cml0eVRva2VuSWQiOiJmZWE5NDA0Ny1lMjhhLTQ5ZGQtOGQ0YS1mZDdjNDY2MDE0YzUiLCJpYXQiOjE3MDc3Njk3ODEsImV4cCI6MTcwODM3NDU4MX0.IglDlXs9JymBwLrpPUMREpSkClkjY0xuJmoXgHwiqLk"
-            />;
+          if (load) {
+            return (
+              <div>
+                {isLoading && <div>Loading dashboard...</div>}
+                <Embeddable
+                  token="eyJhbGciOiJIUzI1NiJ9.eyJzZWN1cml0eVRva2VuSWQiOiJlNWQ2ZWFmZS0yMDMzLTRkYjgtYTdiYy1mYTAyOTkzYjczZGQiLCJpYXQiOjE3MDg1OTA5MDgsImV4cCI6MTcwOTE5NTcwOH0.ccj1bNbT3KOmYCu7Oi7JWT7Yea1vo0Q5xN30mvA9i64"
+                  onComponentsLoad={() =>  setIsLoading(false)}
+                />
+              </div>
+            );
           }
 
           return (
-            <button onClick={() => this.setState({ load: true })}>
+            <button onClick={() => {
+              setIsLoading(true);
+              setLoad(true);
+            }}>
               Load my dashboard
             </button>
           );
-        }
       }
 
       const domContainer = document.querySelector('#test-container');

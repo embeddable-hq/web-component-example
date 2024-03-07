@@ -18,30 +18,54 @@
     <script type="text/babel">
       'use strict';
 
-      function Embeddable({onComponentsLoad, ...props}) {
+      function Embeddable({token, onComponentsLoad, variables, onVariablesChange}) {
         const ref = React.useRef(null);
-
+        function handleVariableChange(e) {
+          if(onVariablesChange) {
+            onVariablesChange(
+              Object.fromEntries(
+                e.detail.map(c => [c.variableName, c.newValue])
+              )
+            )  
+          }
+        }
         React.useEffect(() => {
+          ref.current.addEventListener('variablesChange', handleVariableChange);
           ref.current.addEventListener('componentsLoad', onComponentsLoad);
           return () => {
             ref.current.removeEventListener('componentsLoad', onComponentsLoad);
+            ref.current.removeEventListener('variablesChange', handleVariableChange);
           };
         }, []);
-        return React.createElement('em-beddable', {...props, ref});
+        return React.createElement('em-beddable', {
+          ref, 
+          token, 
+          variables: JSON.stringify(variables)
+        });
       }
 
       const TestComponent = () => {
         const [load, setLoad] = React.useState(false);
         const [isLoading, setIsLoading] = React.useState(false);
+        const DEFAULT = { 'Text Value': 'Germany' };
+        const [variables, setVariables] = React.useState(DEFAULT)
 
           if (load) {
             return (
               <div>
                 {isLoading && <div>Loading dashboard...</div>}
-                <Embeddable
-                  token="eyJhbGciOiJIUzI1NiJ9.eyJzZWN1cml0eVRva2VuSWQiOiJlNWQ2ZWFmZS0yMDMzLTRkYjgtYTdiYy1mYTAyOTkzYjczZGQiLCJpYXQiOjE3MDg1OTA5MDgsImV4cCI6MTcwOTE5NTcwOH0.ccj1bNbT3KOmYCu7Oi7JWT7Yea1vo0Q5xN30mvA9i64"
-                  onComponentsLoad={() =>  setIsLoading(false)}
-                />
+                <div>
+                  <div>{JSON.stringify(variables)}</div>
+                  <button onClick={() => setVariables(DEFAULT)}>reset</button>
+                </div>
+                <div>
+                  <Embeddable 
+                    variables={variables}
+                    onVariablesChange={v => setVariables(v)}
+                    onComponentsLoad={() => setIsLoading(false)}
+                    token="eyJhbGciOiJIUzI1NiJ9.eyJzZWN1cml0eVRva2VuSWQiOiIwODQ5MzA3ZC1kNzgxLTQ2ZTItYWVhYy0wMzhlYzBiMWQ2ZTEiLCJpYXQiOjE3MDk4MTU5NDgsImV4cCI6MTcxMDQyMDc0OH0.NojqfJ8sHGLyNAvfPvGtcxAMAPz2FsfA84jriQnJmXc"
+                  />
+                </div>
               </div>
             );
           }

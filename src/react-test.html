@@ -1,86 +1,112 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
   <head>
     <title>Embedabble</title>
     <meta charset="utf-8" />
+    <script type="module" src="https://api.embeddable.com/js/v1/"></script>
     <script
-      type="module"
-      src="https://api.embeddable.com/js/v1/"></script>
-    <script 
-      src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
-    <script 
-      src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+      src="https://unpkg.com/react@18/umd/react.development.js"
+      crossorigin
+    ></script>
+    <script
+      src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"
+      crossorigin
+    ></script>
     <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
   </head>
   <body>
-    <div id='test-container'></div>
+    <div id="test-container"></div>
 
     <script type="text/babel">
-      'use strict';
+      "use strict";
 
-      function Embeddable({token, onComponentsLoad, variables, onVariablesChange}) {
+      function Embeddable({
+        token,
+        onComponentsLoad,
+        variables,
+        onVariablesChange,
+        onEmbeddableError,
+      }) {
         const ref = React.useRef(null);
         function handleVariableChange(e) {
-          if(onVariablesChange) {
+          if (onVariablesChange) {
             onVariablesChange(
               Object.fromEntries(
-                e.detail.map(c => [c.variableName, c.newValue])
-              )
-            )  
+                e.detail.map((c) => [c.variableName, c.newValue]),
+              ),
+            );
           }
         }
+
+        function handleEmbeddableError(e) {
+          onEmbeddableError(e.detail);
+        }
+
         React.useEffect(() => {
-          ref.current.addEventListener('variablesChange', handleVariableChange);
-          ref.current.addEventListener('componentsLoad', onComponentsLoad);
+          ref.current.addEventListener("variablesChange", handleVariableChange);
+          ref.current.addEventListener("componentsLoad", onComponentsLoad);
+          ref.current.addEventListener(
+            "embeddableError",
+            handleEmbeddableError,
+            handleEmbeddableError,
+          );
           return () => {
-            ref.current.removeEventListener('componentsLoad', onComponentsLoad);
-            ref.current.removeEventListener('variablesChange', handleVariableChange);
+            ref.current.removeEventListener("componentsLoad", onComponentsLoad);
+            ref.current.removeEventListener(
+              "variablesChange",
+              handleVariableChange,
+            );
+            ref.current.removeEventListener(
+              "embeddableError",
+              handleEmbeddableError,
+            );
           };
         }, []);
-        return React.createElement('em-beddable', {
-          ref, 
-          token, 
-          variables: JSON.stringify(variables)
+        return React.createElement("em-beddable", {
+          ref,
+          token,
+          variables: JSON.stringify(variables),
         });
       }
 
       const TestComponent = () => {
-        const [load, setLoad] = React.useState(false);
-        const [isLoading, setIsLoading] = React.useState(false);
-        const DEFAULT = { 'Text Value': 'Germany' };
-        const [variables, setVariables] = React.useState(DEFAULT)
+        const [load, setLoad] = React.useState(true);
+        const [isLoading, setIsLoading] = React.useState(true);
+        const DEFAULT = { "Text Value": "Germany" };
+        const [variables, setVariables] = React.useState(DEFAULT);
 
-          if (load) {
-            return (
-              <div>
-                {isLoading && <div>Loading dashboard...</div>}
-                <div>
-                  <div>{JSON.stringify(variables)}</div>
-                  <button onClick={() => setVariables(DEFAULT)}>reset</button>
-                </div>
-                <div>
-                  <Embeddable 
-                    variables={variables}
-                    onVariablesChange={v => setVariables(v)}
-                    onComponentsLoad={() => setIsLoading(false)}
-                    token="eyJhbGciOiJIUzI1NiJ9.eyJzZWN1cml0eVRva2VuSWQiOiIwODQ5MzA3ZC1kNzgxLTQ2ZTItYWVhYy0wMzhlYzBiMWQ2ZTEiLCJpYXQiOjE3MDk4MTU5NDgsImV4cCI6MTcxMDQyMDc0OH0.NojqfJ8sHGLyNAvfPvGtcxAMAPz2FsfA84jriQnJmXc"
-                  />
-                </div>
-              </div>
-            );
-          }
-
+        if (load) {
           return (
-            <button onClick={() => {
+            <div>
+              {isLoading && <div>Loading dashboard...</div>}
+              <div>
+                <Embeddable
+                  variables={variables}
+                  onVariablesChange={(v) => setVariables(v)}
+                  onComponentsLoad={() => setIsLoading(false)}
+                  onEmbeddableError={(e) => {
+                    console.log(`${e.errorMessage} : ${e.errorDetail}`);
+                  }}
+                  token="eyJhbGciOiJIUzI1NiJ9.eyJzZWN1cml0eVRva2VuSWQiOiI1YjBmM2JjMS02ZjUyLTQzZmMtODJkZC1hYWNjZTg2NjRiZTgiLCJpYXQiOjE3MzAzODMyODAsImV4cCI6MTgyMDM4MzI4MH0.NMoOjBNpK2kKxooKNIjiDmWxu1cSN8tywOyuZPw0AkQ"
+                />
+              </div>
+            </div>
+          );
+        }
+
+        return (
+          <button
+            onClick={() => {
               setIsLoading(true);
               setLoad(true);
-            }}>
-              Load my dashboard
-            </button>
-          );
-      }
+            }}
+          >
+            Load my dashboard
+          </button>
+        );
+      };
 
-      const domContainer = document.querySelector('#test-container');
+      const domContainer = document.querySelector("#test-container");
       const root = ReactDOM.createRoot(domContainer);
       root.render(React.createElement(TestComponent));
     </script>

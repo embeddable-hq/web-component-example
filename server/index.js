@@ -9,7 +9,8 @@ const SECURITY_CONTEXT = {
     userId: '9sZSJ9LHsiYXR0cmlidX'
 };
 const USER_KEY = 'some-user@domain.com';
-
+const BASE_URL = 'https://api.us.embeddable.com'; // US
+// const BASE_URL = 'https://api.eu.embeddable.com'; // EU
 
 const app = express();
 
@@ -17,7 +18,7 @@ const app = express();
 app.use(express.static(path.resolve(__dirname, '../client/build')));
 
 app.get('/embeddables', async (req, res) => {
-    const response = await fetch(`https://api.embeddable.com/api/v1/embeddables`, {
+    const response = await fetch(`${BASE_URL}/api/v1/embeddables`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -33,7 +34,7 @@ app.get('/embeddables', async (req, res) => {
 
 app.get('/token', async (req, res) => {
 	console.log(req)
-	const response = await fetch(`https://api.embeddable.com/api/v1/security-token`, {
+	const response = await fetch(`${BASE_URL}/api/v1/security-token`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

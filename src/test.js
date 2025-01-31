@@ -10,12 +10,13 @@ const SECURITY_CONTEXT = {
     userId: '9sZSJ9LHsiYXR0cmlidX'
 };
 const USER_KEY = 'some-user@domain.com';
-
+const BASE_URL = 'https://api.us.embeddable.com'; // US
+// const BASE_URL = 'https://api.eu.embeddable.com'; // EU
 
 async function handler(req, res) {
     console.log('Fetching token...')
 
-    const response = await fetch(`https://api.embeddable.com/api/v1/security-token`, {
+    const response = await fetch(`${BASE_URL}/api/v1/security-token`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -57,7 +58,7 @@ async function handler(req, res) {
           <meta charset="utf-8" />
           <script
             type="module"
-            src="https://api.embeddable.com/js/v1/"
+            src="${BASE_URL}/js/v1/"
           ></script>
         </head>
         <body>

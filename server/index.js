@@ -20,7 +20,7 @@ const BASE_URL = 'https://api.us.embeddable.com'; // US
 const app = express();
 
 // Have Node serve the files for our built React app
-app.use(express.static(path.resolve(__dirname, '../client/build')));
+app.use(express.static(path.resolve(__dirname, '../client-react/build')));
 
 app.get('/embeddables', async (req, res) => {
   const response = await fetch(`${BASE_URL}/api/v1/embeddables`, {
@@ -64,7 +64,7 @@ app.get('/token', async (req, res) => {
 
 // All other GET requests not handled before will return our React app
 app.get('*', (req, res) => {
-  res.sendFile(path.resolve(__dirname, '../client/build', 'index.html'));
+  res.sendFile(path.resolve(__dirname, '../client-react/build', 'index.html'));
 });
 
 app.listen(PORT, () => {

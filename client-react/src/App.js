@@ -21,6 +21,13 @@ function App() {
       .then((json) => setToken(json.token));
   }, [selected]);
 
+  // Client Context can be any arbitrary json
+  const clientContext = JSON.stringify({
+    theme: 'default',
+    currency: 'USD',
+    country: 'United States',
+  });
+
   const content = () => {
     return (
       <div>
@@ -31,7 +38,15 @@ function App() {
             </button>
           ))}
         </div>
-        <div>{token && <Embeddable key={token} token={token} />}</div>
+        <div>
+          {token && (
+            <Embeddable
+              key={token}
+              token={token}
+              client-context={clientContext}
+            />
+          )}
+        </div>
       </div>
     );
   };

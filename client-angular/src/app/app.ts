@@ -13,7 +13,7 @@ const BASE_URL = 'https://api.eu.embeddable.com'; // EU region
 
 const API_KEY = ''; // Your API Key
 const EMBEDDABLE_ID = ''; // Your Embeddable ID
-const USER_KEY = ''; // Your User Key
+const USER_KEY = 'example@yourdomain.com'; // unique key (usually email address) representing current user
 
 @Component({
   imports: [RouterOutlet],
@@ -52,7 +52,7 @@ export class App {
           embeddableId: EMBEDDABLE_ID,
           expiryInSeconds: 60 * 60 * 24 * 7,
           securityContext: {}, // Add your security context here
-          user: USER_KEY, // Add your user key here
+          user: USER_KEY,
         },
         {
           headers: {

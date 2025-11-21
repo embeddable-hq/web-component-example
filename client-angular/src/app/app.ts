@@ -1,6 +1,6 @@
 /*
  *
- * NOTE: This demo does not use the server in `/server` - that's for the react client
+ * NOTE: This demo does not use the server in `/server` - that's for the react and vue clients
  *
  */
 import { Component, CUSTOM_ELEMENTS_SCHEMA, signal } from '@angular/core';

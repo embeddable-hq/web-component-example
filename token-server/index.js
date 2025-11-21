@@ -1,5 +1,6 @@
 const path = require('path');
 const express = require('express');
+require('dotenv').config();
 
 // Environment Variables (set in .env)
 const API_KEY = process.env.API_KEY || '';

@@ -4,12 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "cd client && npm install && npm run build",
-    "start": "node server/index.js"
+    "token-server": "cd token-server && node index.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^17.2.3",
     "express": "^4.21.2"
   }
 }
